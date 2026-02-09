@@ -23,4 +23,24 @@ public class ProductService {
     public Product getProductById(Long id){
         return productRepository.findById(id).orElse(null);
     }
+
+    public Product updateProduct(Long id,Product newProduct){
+
+        Product existingProduct = productRepository.findById(id).orElse(null);
+
+        if (existingProduct != null){
+
+            existingProduct.setName(newProduct.getName());
+            existingProduct.setPrice(newProduct.getPrice());
+            existingProduct.setStock(newProduct.getStock());
+
+            return productRepository.save(existingProduct);
+        }
+
+        return null;
+    }
+
+    public void deleteProduct(Long id){
+        productRepository.deleteById(id);
+    }
 }
