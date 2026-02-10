@@ -45,4 +45,15 @@ public class Product {
         this.stock = stock;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public Category getCategory(){
+        return category;
+    }
+    public void setCatogery(Category category){
+        this.category = category;
+    }
+
 }
