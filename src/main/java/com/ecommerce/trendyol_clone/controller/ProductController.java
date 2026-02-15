@@ -1,7 +1,9 @@
 package com.ecommerce.trendyol_clone.controller;
 
+
 import com.ecommerce.trendyol_clone.model.Product;
 import com.ecommerce.trendyol_clone.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product){
+    public Product createProduct(@Valid @RequestBody Product product){
         return productService.createProduct(product);
     }
 
@@ -32,7 +34,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody Product newProduct){
+    public Product updateProduct( @PathVariable Long id,@Valid @RequestBody Product newProduct){
          return productService.updateProduct(id,newProduct);
     }
 
@@ -40,5 +42,17 @@ public class ProductController {
     public String deleteProduct(@PathVariable Long id){
         productService.deleteProduct(id);
         return "Product deleted successfully.ID: " + id;
+    }
+
+
+    @GetMapping("/category/{categoryId}")
+    public List<Product> getProductsByCategory(@PathVariable Long categoryId){
+        return productService.getProductsByCategory(categoryId);
+    }
+
+    // URL example : /api/products/search?name= Laptop
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String name){
+        return productService.searchProducts(name);
     }
 }
