@@ -55,4 +55,13 @@ public class ProductController {
     public List<Product> searchProducts(@RequestParam String name){
         return productService.searchProducts(name);
     }
+
+    @GetMapping("/sort")
+    public List<Product> getSortedProducts(
+            @RequestParam String sortBy,
+            @RequestParam String direction){
+                return productService.getAllProductSorted(sortBy,direction);
+    }
+
+
 }

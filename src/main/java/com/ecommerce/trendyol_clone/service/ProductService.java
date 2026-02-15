@@ -1,6 +1,7 @@
 package com.ecommerce.trendyol_clone.service;
 import com.ecommerce.trendyol_clone.model.Product;
 import com.ecommerce.trendyol_clone.repository.ProductRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -50,5 +51,12 @@ public class ProductService {
 
     public List<Product> searchProducts(String keyword){
         return productRepository.findByNameContaining(keyword);
+    }
+    public List<Product>  getAllProductSorted(String sortBy,String direction){
+
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        return productRepository.findAll(sort);
     }
 }
