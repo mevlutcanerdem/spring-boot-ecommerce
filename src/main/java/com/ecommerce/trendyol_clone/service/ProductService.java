@@ -1,6 +1,10 @@
 package com.ecommerce.trendyol_clone.service;
+import com.ecommerce.trendyol_clone.dto.ProductDto;
 import com.ecommerce.trendyol_clone.model.Product;
 import com.ecommerce.trendyol_clone.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -21,8 +25,15 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Product getProductById(Long id){
-        return productRepository.findById(id).orElse(null);
+    public ProductDto getProductDtoById(Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product could not found!"));
+
+        ProductDto dto = new ProductDto();
+        dto.setName(product.getName());
+        dto.setPrice(product.getPrice());
+
+        return dto;
     }
 
     public Product updateProduct(Long id,Product newProduct){
@@ -58,5 +69,12 @@ public class ProductService {
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         return productRepository.findAll(sort);
+    }
+    // int page : which page are you in
+    // int size : how many product in a page
+    public Page<Product> getAllProductsWithPagination(int page, int size){
+        Pageable pageable = PageRequest.of(page,size);
+
+        return productRepository.findAll(pageable);
     }
 }

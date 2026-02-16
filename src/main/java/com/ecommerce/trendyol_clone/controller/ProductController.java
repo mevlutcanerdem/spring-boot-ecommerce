@@ -1,9 +1,11 @@
 package com.ecommerce.trendyol_clone.controller;
 
 
+import com.ecommerce.trendyol_clone.dto.ProductDto;
 import com.ecommerce.trendyol_clone.model.Product;
 import com.ecommerce.trendyol_clone.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,8 +31,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id){
-        return productService.getProductById(id);
+    public ProductDto getProductById(@PathVariable Long id){
+        return productService.getProductDtoById(id);
     }
 
     @PutMapping("/{id}")
@@ -63,5 +65,17 @@ public class ProductController {
                 return productService.getAllProductSorted(sortBy,direction);
     }
 
+    @GetMapping("/pagination")
+    public Page<Product> getProductsWithPagination(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
 
+        return productService.getAllProductsWithPagination(page,size);
+
+    }
+
+    @GetMapping("/dto/{id}")
+    public ProductDto getProductWithDto(@PathVariable Long id){
+        return productService.getProductDtoById(id);
+    }
 }
