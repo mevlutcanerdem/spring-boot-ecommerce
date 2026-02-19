@@ -2,6 +2,7 @@ package com.ecommerce.trendyol_clone.service;
 import com.ecommerce.trendyol_clone.dto.ProductDto;
 import com.ecommerce.trendyol_clone.model.Product;
 import com.ecommerce.trendyol_clone.repository.ProductRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +14,13 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
 
-    public ProductService(ProductRepository productRepository){
+
+
+    public ProductService(ProductRepository productRepository,ModelMapper modelMapper){
         this.productRepository = productRepository;
+        this.modelMapper = modelMapper;
     }
 
     public List<Product> getAllProducts(){
@@ -29,11 +34,9 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product could not found!"));
 
-        ProductDto dto = new ProductDto();
-        dto.setName(product.getName());
-        dto.setPrice(product.getPrice());
+       ProductDto productDto = modelMapper.map(product,ProductDto.class);
 
-        return dto;
+        return productDto;
     }
 
     public Product updateProduct(Long id,Product newProduct){
